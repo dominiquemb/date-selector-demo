@@ -1,0 +1,69 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dateBox {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 27px;
+  width: 150px;
+  height: 100px;
+  padding: 10px;
+  margin: 1px;
+  color: #ccc;
+  background-color: #f4f4f4;
+}
+
+.dateBox.selected {
+  border: 5px solid rgb(91, 61, 234);
+  border-radius: 15px;
+  color: rgb(91, 61, 234);
+}
+
+.dateBox.available {
+  cursor: pointer;
+  background-color: #e8e8e8;
+  color: #999;
+}
+
+.daysContainer {
+  overflow-x: scroll;
+  display: inline-flex;
+}
