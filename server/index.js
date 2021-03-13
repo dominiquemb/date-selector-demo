@@ -1,18 +1,38 @@
-var { generateOffice365Schedule } = require("./utils/schedule")
+var { generateOffice365Schedule, parseAvailableSlots } = require("./utils/schedule")
 var { now } = require("./utils/dateHelper");
 
 var express = require('express');
 var app = express();
+app.use(
+  express.urlencoded({
+    extended: true
+  })
+);
+app.use(express.json());
 var port = 8080;
 
 app.get('/availability', function (req, res) {
-    
-    // STEP 1 use a mock response and display on the client
-    const response = generateMockUpResponse()
+    let data;
+    let availableSlots;
 
-    // STEP 2 generate real data and convert to expected format
-    // const data = generateOffice365Schedule(startDate, endDate)
-    return res.send(response);
+    const { query } = req;
+    const { startDate, endDate, startTime, endTime } = query;
+
+    if (startDate && endDate) {
+      data = generateOffice365Schedule(startDate, endDate);
+    }
+
+    if (data && data.value && data.value[0] && data.value[0].availabilityView) {
+      availableSlots = data.value[0].availabilityView;
+    }
+    
+    return res.send(parseAvailableSlots({
+      startDateRaw: startDate,
+      endDateRaw: endDate,
+      availableSlots,
+      startTime,
+      endTime,
+    }));
 });
 
 function generateMockUpResponse() {

@@ -1,3 +1,5 @@
+const { DateTime, Duration } = require("luxon");
+
 var {
   isSameDayMonthYear,
   durationInDays,
@@ -97,7 +99,73 @@ const generateAvailabilityView = (startDate, endDate, events) => {
   );
 };
 
-exports.generateOffice365Schedule = (startDate, endDate) => {
+exports.parseAvailableSlots = ({
+  startDateRaw, endDateRaw, availableSlots, startTime, endTime
+  }) => {
+  const startDate = DateTime.fromISO(startDateRaw);
+  const endDate = DateTime.fromISO(endDateRaw);
+  
+  const hours = [];
+  const slots = [];
+  const days = [];
+  const startHour = startDate.hour;
+  const endHour = endDate.hour;
+  const diffInDays = endDate.diff(startDate, ["days", "hours"]).days;
+  const slotsPerDay = 24;
+  const iterableSlots = String(availableSlots).split('');
+  let hourIterator = 0;
+
+
+  for (let i = 0; i < diffInDays; i++) {
+    let allSlots = [];
+
+    dateObj = {
+      date: startDate.plus({days: i}).toFormat('dd/LL/yyyy'),
+      availableSlots: [],
+    };
+
+    for (let x = 0; x < slotsPerDay; x++) {
+      allSlots.push(parseInt(iterableSlots.shift()));
+    }
+
+    for (let y = 0; y < allSlots.length; y++) {
+      if (allSlots[y] === 0) {
+        const start = y + ':00';
+        let end = (y+1) + ':00';
+
+        if (end === '24:00') {
+          end = '00:00';
+        }
+
+        dateObj.availableSlots.push({
+          startTime: start,
+          endTime: end
+        })
+      }
+    }
+
+    if (startTime && endTime) {
+      dateObj.availableSlots = dateObj.availableSlots.filter((slot) => {
+        let slotHour = parseInt(slot.startTime.split(':')[0]);
+        let startTimeHour = parseInt(startTime.split(':')[0]);
+        let endTimeHour = parseInt(endTime.split(':')[0]);
+
+        if (slotHour >= startTimeHour && slotHour <= endTimeHour) {
+          return slot;
+        }
+        return false;
+      });
+    }
+    
+    days.push(dateObj);
+  }
+
+  return days;
+}
+
+exports.generateOffice365Schedule = (startDateRaw, endDateRaw) => {
+  const startDate = DateTime.fromISO(startDateRaw, {zone: 'utc'});
+  const endDate = DateTime.fromISO(endDateRaw, {zone: 'utc'});
   const events = generateEvents(startDate, endDate);
   const availabilityView = generateAvailabilityView(startDate, endDate, events);
 

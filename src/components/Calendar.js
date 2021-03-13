@@ -25,10 +25,18 @@ function Calendar() {
     }
   
     const getDays = async () => {
-      const { data: daysWithAvailability } = await getAvailability();
+      const openingHour = 8;
+      const closingHour = 21;
+
       todaysDate = moment(new Date());
+      const { data: daysWithAvailability } = await getAvailability({
+          startDate: todaysDate.format('YYYY-MM-DD') + 'T00:00:00',
+          endDate: moment(todaysDate).add(30, 'days').format('YYYY-MM-DD' + 'T00:00:00'),
+          startTime: openingHour + ':00',
+          endTime: closingHour + ':00',
+      });
+
       let newDaysToDisplay = [];
-      
       let maxDaysInTheFuture = 30;
       let iterations = 0;
       let dateIterated = moment(todaysDate);
@@ -41,7 +49,7 @@ function Calendar() {
           showMonth: todaysDate.month() !== dateIterated.month(),
           formattedDate: dateIterated.format('DD/MM/YYYY'),
           available: false,
-          hours: getHours(8, 21),
+          hours: getHours(openingHour, closingHour),
         };
   
         if (daysWithAvailability) {
@@ -59,20 +67,24 @@ function Calendar() {
             }
           })
         }
-  
-        console.log(daysWithAvailability)
-  
+    
         newDaysToDisplay.push(dateObj);
   
         dateIterated = moment(todaysDate).add(iterations+1, 'days');
       }
   
-      console.log(newDaysToDisplay);
       setDaysToDisplay(newDaysToDisplay);
     }
   
-    const getAvailability = async() => {
-      return await axios.get(`http://localhost:3000/availability`);
+    const getAvailability = async({startDate, endDate, startTime, endTime}) => {
+      return await axios.get(`http://localhost:3000/availability`, {
+          params: {
+              startDate,
+              endDate,
+              startTime,
+              endTime
+          }
+      });
     }
   
     const displaySlots = (date) => {
