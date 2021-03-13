@@ -1,0 +1,54 @@
+
+.timeContainer {
+    position: fixed;
+    width: 100%;
+  }
+  
+  .timeBox {
+    display: inline-flex;
+    width: auto;
+    height: 30px;
+    margin: 5px;
+    padding: 14px 33px 14px 33px;
+    font-size: 27px;
+    border-radius: 15px;
+    border: 3px solid #e6e6e6;
+    color: #e6e6e6;
+  }
+  
+  .timeBox.available {
+    border: 3px solid #000;
+    color: #000;
+  }
+  
+  .dateBox {
+    display: inline-flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 27px;
+    width: 150px;
+    height: 100px;
+    padding: 10px;
+    margin: 1px;
+    color: #ccc;
+    background-color: #f4f4f4;
+  }
+  
+  .dateBox.available {
+    cursor: pointer;
+    background-color: #e8e8e8;
+    color: #999;
+  }
+  
+  .dateBox.selected {
+    border: 5px solid rgb(91, 61, 234);
+    border-radius: 8px;
+    color: rgb(91, 61, 234);
+  }
+  
+  .daysContainer {
+    overflow-x: scroll;
+    display: inline-flex;
+  }

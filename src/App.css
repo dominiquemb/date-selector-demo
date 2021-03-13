@@ -36,34 +36,3 @@
     transform: rotate(360deg);
   }
 }
-
-.dateBox {
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 27px;
-  width: 150px;
-  height: 100px;
-  padding: 10px;
-  margin: 1px;
-  color: #ccc;
-  background-color: #f4f4f4;
-}
-
-.dateBox.selected {
-  border: 5px solid rgb(91, 61, 234);
-  border-radius: 15px;
-  color: rgb(91, 61, 234);
-}
-
-.dateBox.available {
-  cursor: pointer;
-  background-color: #e8e8e8;
-  color: #999;
-}
-
-.daysContainer {
-  overflow-x: scroll;
-  display: inline-flex;
-}
